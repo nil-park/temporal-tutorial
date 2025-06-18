@@ -5,7 +5,7 @@ from time import time
 import yaml
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from tqdm import tqdm, trange
+from tqdm import trange
 from transformers.pipelines import pipeline
 
 from .types import InferenceResult, TestCases

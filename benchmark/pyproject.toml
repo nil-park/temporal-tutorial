@@ -16,6 +16,7 @@ dependencies = [
 
 [project.scripts]
 benchmark = "benchmark.__main__:main"
+split-pipeline = "benchmark.split_pipeline:main"
 format-code = "scripts.format_code:main"
 run-all-tests = "scripts.run_all_tests:main"
 
