@@ -3,11 +3,12 @@ from random import choices
 from time import time
 
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from tqdm import tqdm, trange
 from transformers.pipelines import pipeline
 
+from .types import InferenceResult, TestCases
 from .utils import print_cyan, print_green, print_magenta, print_red, print_yellow
 
 FILE_DIR = Path(__file__).parent
@@ -34,20 +35,6 @@ class Settings(BaseSettings):
             "If set to 0, print the results without running the benchmark."
         ),
     )
-
-
-class TestCase(BaseModel):
-    input: str
-    output: str
-
-
-class TestCases(BaseModel):
-    tests: list[TestCase]
-
-
-class InferenceResult(BaseModel):
-    label: str
-    score: float
 
 
 def main():
