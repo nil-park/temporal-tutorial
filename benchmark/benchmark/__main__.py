@@ -55,7 +55,7 @@ def main():
         inputs = [case.input for case in test_cases.tests]
         print_cyan(f"Running benchmark for {settings.iterations} iterations...")
         start_time = time()
-        for i in trange(settings.iterations, desc="Benchmarking iterations"):
+        for _ in trange(settings.iterations, desc="Benchmarking iterations"):
             case = choices(inputs, k=settings.batch_size)
             _ = sentiment_analysis(case)
         end_time = time()
@@ -66,7 +66,7 @@ def main():
         )
     else:
         print_cyan("No iterations specified. Running tests without benchmarking.")
-        for case in tqdm(test_cases.tests, desc="Running test cases"):
+        for case in test_cases.tests:
             result: list[dict] = sentiment_analysis(case.input)  # type: ignore
             typed_result = InferenceResult(**result[0])
             if typed_result.label == case.output:
