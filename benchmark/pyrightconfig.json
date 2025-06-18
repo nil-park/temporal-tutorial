@@ -1,0 +1,15 @@
+{
+    "include": [
+        "."
+    ],
+    "exclude": [
+        ".git",
+        "__pycache__",
+        ".venv",
+        ".data",
+        ".out",
+    ],
+    "pythonVersion": "3.12",
+    "typeCheckingMode": "strict",
+    "reportMissingImports": true
+}
