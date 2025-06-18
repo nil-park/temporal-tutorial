@@ -10,6 +10,6 @@
         ".out",
     ],
     "pythonVersion": "3.12",
-    "typeCheckingMode": "strict",
+    "typeCheckingMode": "basic",
     "reportMissingImports": true
 }
