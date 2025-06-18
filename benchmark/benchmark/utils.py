@@ -13,5 +13,9 @@ def print_yellow(text: str) -> None:
     print(Fore.YELLOW + text + Style.RESET_ALL)
 
 
+def print_green(text: str) -> None:
+    print(Fore.GREEN + text + Style.RESET_ALL)
+
+
 def print_red(text: str) -> None:
     print(Fore.RED + text + Style.RESET_ALL)

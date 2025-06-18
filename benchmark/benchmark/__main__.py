@@ -8,7 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from tqdm import tqdm, trange
 from transformers.pipelines import pipeline
 
-from .utils import print_cyan, print_magenta, print_red, print_yellow
+from .utils import print_cyan, print_green, print_magenta, print_red, print_yellow
 
 FILE_DIR = Path(__file__).parent
 REPOSITORY_ROOT = FILE_DIR.parent.parent
@@ -83,9 +83,11 @@ def main():
             result: list[dict] = sentiment_analysis(case.input)  # type: ignore
             typed_result = InferenceResult(**result[0])
             if typed_result.label == case.output:
-                print_yellow(f"Test passed for input: {case.input}")
+                print_green(f"Test passed for input: {case.input}.")
+                print_yellow(f"  - {typed_result}")
             else:
-                print_red(f"Test failed for input: {case.input}. Expected: {case.output}, Got: {typed_result.label}")
+                print_red(f"Test failed for input: {case.input}. Expected: {case.output}.")
+                print_yellow(f"  - {typed_result}")
 
 
 if __name__ == "__main__":
