@@ -9,7 +9,8 @@ from .utils import print_cyan, print_green, print_magenta, print_red, print_yell
 
 FILE_DIR = Path(__file__).parent
 REPOSITORY_ROOT = FILE_DIR.parent.parent
-TEST_CASES_FILE = REPOSITORY_ROOT / "cases" / "test_cases.yaml"
+TEST_CASES_FILE = REPOSITORY_ROOT / "artifacts" / "test_cases.yaml"
+ID2LABEL_FILE = REPOSITORY_ROOT / "artifacts" / "id2label.yaml"
 
 
 def main():
@@ -22,6 +23,9 @@ def main():
 
     print_magenta("id2label mapping:")
     print_yellow(yaml.dump(id2label, sort_keys=True))
+    with open(ID2LABEL_FILE, "r") as file:
+        _id2label = yaml.safe_load(file)
+        assert id2label == _id2label, "id2label mapping does not match the saved file."
 
     print_cyan("Preparing test cases...")
     with open(TEST_CASES_FILE, "r") as file:

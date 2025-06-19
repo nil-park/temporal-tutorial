@@ -13,7 +13,7 @@ from .utils import print_cyan, print_green, print_magenta, print_red, print_yell
 
 FILE_DIR = Path(__file__).parent
 REPOSITORY_ROOT = FILE_DIR.parent.parent
-TEST_CASES_FILE = REPOSITORY_ROOT / "cases" / "test_cases.yaml"
+TEST_CASES_FILE = REPOSITORY_ROOT / "artifacts" / "test_cases.yaml"
 
 
 class Settings(BaseSettings):
