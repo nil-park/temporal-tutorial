@@ -1,2 +1,6 @@
+from benchmark.utils import print_cyan
+
+
 def test_hello():
-    pass
+    print()
+    print_cyan("Hello, world!")
