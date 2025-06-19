@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.scripts]
-tokenizer = "bert_emotion_tokenizer.__main__:main"
+tokenizer = "bert_emotion_tokenizer.__main__:run"
 format-code = "scripts.format_code:main"
 run-all-tests = "scripts.run_all_tests:main"
 
