@@ -1,4 +1,6 @@
 import base64
+import json
+from typing import Literal
 
 import blosc
 import numpy as np
@@ -42,8 +44,8 @@ class Tokenized(BaseModel):
             shape=shape,
         )
 
-    def to_base64_yaml(self) -> str:
-        def encode(arr):
+    def encode(self, format: Literal["json", "yaml"]) -> str:
+        def _encode(arr):
             arr_np = np.array(arr, dtype=np.int32)
             compressed = blosc.compress(arr_np.tobytes(), typesize=4)
 
@@ -51,17 +53,23 @@ class Tokenized(BaseModel):
 
         data = {
             "tokenized": {
-                "input_ids": encode(self.input_ids),
-                "attention_mask": encode(self.attention_mask),
-                "token_type_ids": encode(self.token_type_ids),
+                "input_ids": _encode(self.input_ids),
+                "attention_mask": _encode(self.attention_mask),
+                "token_type_ids": _encode(self.token_type_ids),
                 "shape": self.shape,
             }
         }
-        return yaml.safe_dump(data, sort_keys=True, indent=2)
+        if format == "json":
+            return json.dumps(data, sort_keys=True)
+        else:
+            return yaml.safe_dump(data, sort_keys=True, indent=2)
 
     @staticmethod
-    def from_base64_yaml(base64_yaml: str) -> "Tokenized":
-        data = yaml.safe_load(base64_yaml)
+    def decode(text: str, format: Literal["json", "yaml"]) -> "Tokenized":
+        if format == "json":
+            data = json.loads(text)
+        else:
+            data = yaml.safe_load(text)
         shape = data["tokenized"]["shape"]
 
         def decode(encoded):
