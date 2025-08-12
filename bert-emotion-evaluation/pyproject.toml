@@ -1,0 +1,60 @@
+[project]
+name = "benchmark-emotion-evaluation"
+version = "0.0.0"
+description = ""
+authors = [{ name = "nil-park", email = "kwang0621@gmail.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+  "pydantic (>=2.10.6,<3.0.0)",
+  "pydantic-settings (>=2.7.1,<3.0.0)",
+  "torch (>=2.7.1,<3.0.0)",
+  "transformers (>=4.52.4,<5.0.0)",
+  "pyyaml (>=6.0.2,<7.0.0)",
+  "tqdm (>=4.67.1,<5.0.0)",
+  "colorama (>=0.4.6,<0.5.0)",
+  "blosc (>=1.11.3,<2.0.0)",
+]
+
+[project.scripts]
+e2e = "e2e.__main__:main"
+stepwise = "stepwise.__main__:main"
+format-code = "scripts.format_code:main"
+run-all-tests = "scripts.run_all_tests:main"
+
+[tool.poetry]
+packages = [
+  { include = "e2e" },
+  { include = "stepwise" },
+  { include = "utils" },
+  { include = "bert_emotion_types" },
+]
+
+[tool.poetry.group.dev.dependencies]
+isort = "^6.0.0"
+black = "^25.1.0"
+flake8 = "^7.1.1"
+pyright = "^1.1.393"
+pytest = "^8.3.4"
+rich = "^13.9.4"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 119
+target-version = ["py312"]
+exclude = '''
+/(
+    \.git
+  | __pycache__
+  | \.venv
+  | \.out
+  | \.data
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 119
+skip = [".venv", ".out", ".data"]
