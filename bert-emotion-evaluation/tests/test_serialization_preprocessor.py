@@ -16,8 +16,8 @@ def test_serialization_preprocessor():
 
     print_cyan("Testing serialization of Preprocessor...")
     input_text = test_cases["input"]
-
-    encoded_output = preprocessor(input_text, format="yaml")
+    tokenized = preprocessor(input_text)
+    encoded_output = tokenized.encode(format="yaml")
     print_cyan("Tokenized output (encoded):")
     print_yellow(encoded_output)
 

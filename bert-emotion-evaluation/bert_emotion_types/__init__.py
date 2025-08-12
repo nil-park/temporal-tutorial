@@ -45,17 +45,11 @@ class Tokenized(BaseModel):
         )
 
     def encode(self, format: Literal["json", "yaml"]) -> str:
-        def _encode(arr):
-            arr_np = np.array(arr, dtype=np.int32)
-            compressed = blosc.compress(arr_np.tobytes(), typesize=4)
-
-            return base64.b64encode(compressed).decode("utf-8")
-
         data = {
             "tokenized": {
-                "input_ids": _encode(self.input_ids),
-                "attention_mask": _encode(self.attention_mask),
-                "token_type_ids": _encode(self.token_type_ids),
+                "input_ids": _encode_int32(self.input_ids),
+                "attention_mask": _encode_int32(self.attention_mask),
+                "token_type_ids": _encode_int32(self.token_type_ids),
                 "shape": self.shape,
             }
         }
@@ -72,13 +66,70 @@ class Tokenized(BaseModel):
             data = yaml.safe_load(text)
         shape = data["tokenized"]["shape"]
 
-        def decode(encoded):
-            arr_bytes = blosc.decompress(base64.b64decode(encoded))
-            return np.frombuffer(arr_bytes, dtype=np.int32).reshape(shape).tolist()
-
         return Tokenized(
-            input_ids=decode(data["tokenized"]["input_ids"]),
-            attention_mask=decode(data["tokenized"]["attention_mask"]),
-            token_type_ids=decode(data["tokenized"]["token_type_ids"]),
+            input_ids=_decode_int32(data["tokenized"]["input_ids"], shape),
+            attention_mask=_decode_int32(data["tokenized"]["attention_mask"], shape),
+            token_type_ids=_decode_int32(data["tokenized"]["token_type_ids"], shape),
             shape=shape,
         )
+
+
+class OutputLogits(BaseModel):
+    logits: list[list[float]]
+    shape: list[int]
+
+    @staticmethod
+    def from_model_output(model_output) -> "OutputLogits":
+        return OutputLogits(
+            logits=model_output.logits.tolist(),
+            shape=list(model_output.logits.shape),
+        )
+
+    def encode(self, format: Literal["json", "yaml"]) -> str:
+        data = {
+            "output_logits": {
+                "logits": _encode_float32(self.logits),
+                "shape": self.shape,
+            }
+        }
+        if format == "json":
+            return json.dumps(data, sort_keys=True)
+        else:
+            return yaml.safe_dump(data, sort_keys=True, indent=2)
+
+    @staticmethod
+    def decode(text: str, format: Literal["json", "yaml"]) -> "OutputLogits":
+        if format == "json":
+            data = json.loads(text)
+        else:
+            data = yaml.safe_load(text)
+        shape = data["output_logits"]["shape"]
+
+        return OutputLogits(
+            logits=_decode_float32(data["output_logits"]["logits"], shape),
+            shape=shape,
+        )
+
+
+def _encode_int32(arr):
+    arr_np = np.array(arr, dtype=np.int32)
+    compressed = blosc.compress(arr_np.tobytes(), typesize=4)
+
+    return base64.b64encode(compressed).decode("utf-8")
+
+
+def _decode_int32(encoded, shape):
+    arr_bytes = blosc.decompress(base64.b64decode(encoded))
+    return np.frombuffer(arr_bytes, dtype=np.int32).reshape(shape).tolist()
+
+
+def _encode_float32(arr):
+    arr_np = np.array(arr, dtype=np.float32)
+    compressed = blosc.compress(arr_np.tobytes(), typesize=4)
+
+    return base64.b64encode(compressed).decode("utf-8")
+
+
+def _decode_float32(encoded, shape):
+    arr_bytes = blosc.decompress(base64.b64decode(encoded))
+    return np.frombuffer(arr_bytes, dtype=np.float32).reshape(shape).tolist()
