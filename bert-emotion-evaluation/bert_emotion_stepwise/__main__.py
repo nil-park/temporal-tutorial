@@ -2,7 +2,7 @@ from pathlib import Path
 
 import yaml
 
-from bert_emotion_types import InferenceResult, TestCases
+from bert_emotion_types import TestCases
 from bert_emotion_utils import print_cyan, print_green, print_magenta, print_red, print_yellow
 
 from . import Postprocessor, Predictor, Preprocessor
@@ -23,13 +23,15 @@ def main():
     print_magenta(f"Loaded {len(test_cases.tests)} test cases.")
 
     print_cyan("Running text-classification pipeline on test cases...")
-    for case in test_cases.tests:
-        p1 = preprocessor(case.input)
-        p2 = predictor(p1)
-        result: InferenceResult = postprocessor(p2).inference_results[0]
-        if result.label == case.output:
-            print_green(f"Test passed for input: {case.input}.")
-            print_yellow(f"  - {result}")
+    inputs = [case.input for case in test_cases.tests]
+    expected_labels = [case.output for case in test_cases.tests]
+    p1 = preprocessor(inputs)
+    p2 = predictor(p1)
+    got_outputs = postprocessor(p2).inference_results
+    for x, y, expected in zip(inputs, got_outputs, expected_labels):
+        if y.label == expected:
+            print_green(f"Test passed for input: {x}.")
+            print_yellow(f"  - {y}")
         else:
-            print_red(f"Test failed for input: {case.input}. Expected: {case.output}.")
-            print_yellow(f"  - {result}")
+            print_red(f"Test failed for input: {x}. Expected: {expected}.")
+            print_yellow(f"  - {y}")

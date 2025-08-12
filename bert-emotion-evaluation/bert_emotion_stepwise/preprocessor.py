@@ -8,6 +8,6 @@ class Preprocessor:
         model_name = "boltuix/bert-emotion"
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-    def __call__(self, x: str) -> Tokenized:
+    def __call__(self, x: list[str]) -> Tokenized:
         y1 = self.tokenizer(x, truncation=True, padding="max_length", max_length=512, return_tensors="pt")
         return Tokenized.from_tokenizer_output(y1)
