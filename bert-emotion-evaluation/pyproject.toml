@@ -16,16 +16,16 @@ dependencies = [
 ]
 
 [project.scripts]
-e2e = "e2e.__main__:main"
-stepwise = "stepwise.__main__:main"
-format-code = "scripts.format_code:main"
-run-all-tests = "scripts.run_all_tests:main"
+e2e = "bert_emotion_e2e.__main__:main"
+stepwise = "bert_emotion_stepwise.__main__:main"
+format-code = "bert_emotion_utils.format_code:main"
+run-all-tests = "bert_emotion_utils.run_all_tests:main"
 
 [tool.poetry]
 packages = [
-  { include = "e2e" },
-  { include = "stepwise" },
-  { include = "utils" },
+  { include = "bert_emotion_e2e" },
+  { include = "bert_emotion_stepwise" },
+  { include = "bert_emotion_utils" },
   { include = "bert_emotion_types" },
 ]
 

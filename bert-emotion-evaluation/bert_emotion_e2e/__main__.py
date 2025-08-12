@@ -3,7 +3,7 @@ from pathlib import Path
 import yaml
 
 from bert_emotion_types import InferenceResult, TestCases
-from utils import print_cyan, print_green, print_magenta, print_red, print_yellow
+from bert_emotion_utils import print_cyan, print_green, print_magenta, print_red, print_yellow
 
 from . import EndToEndModel
 
