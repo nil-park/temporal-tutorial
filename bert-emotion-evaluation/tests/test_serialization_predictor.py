@@ -13,7 +13,7 @@ def test_serialization_predictor():
     print()
     text = TEST_CASES_FILE.read_text()
     test_cases = yaml.safe_load(text)
-    predictor = Predictor() 
+    predictor = Predictor()
 
     print_cyan("Testing serialization of Predictor...")
     tokenized = Tokenized.decode(text, format="yaml")

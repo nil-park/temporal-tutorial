@@ -11,5 +11,9 @@ tokenized:
 output_logits:
   logits: AgETBDQAAAA0AAAARAAAALJUAMBk0Y+/T1+vQKcj7779+AHA4d6YQFChSz8qhbW/xWQRwFBMVcA1Ky2/TLqpvicwnsA=
   shape:
-  - 1
-  - 13
+    - 1
+    - 13
+
+inference_results:
+  - label: love
+    score: 0.6596102118492126

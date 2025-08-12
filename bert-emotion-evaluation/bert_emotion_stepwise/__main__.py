@@ -26,7 +26,7 @@ def main():
     for case in test_cases.tests:
         p1 = preprocessor(case.input)
         p2 = predictor(p1)
-        result: InferenceResult = postprocessor(p2)
+        result: InferenceResult = postprocessor(p2).inference_results[0]
         if result.label == case.output:
             print_green(f"Test passed for input: {case.input}.")
             print_yellow(f"  - {result}")

@@ -20,5 +20,4 @@ class Predictor:
                 attention_mask=torch.tensor(x.attention_mask, device=self.device),
                 token_type_ids=torch.tensor(x.token_type_ids, device=self.device),
             )
-            print(outputs.logits.dtype)
         return OutputLogits.from_model_output(outputs)

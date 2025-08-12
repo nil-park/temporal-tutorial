@@ -5,7 +5,7 @@ from typing import Literal
 import blosc
 import numpy as np
 import yaml
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class TestCase(BaseModel):
@@ -20,6 +20,35 @@ class TestCases(BaseModel):
 class InferenceResult(BaseModel):
     label: str
     score: float
+
+
+class InferenceResults(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    inference_results: list[InferenceResult]
+
+    def encode(self, format: Literal["json", "yaml"]) -> str:
+        data = {
+            "inference_results": [
+                {
+                    "label": result.label,
+                    "score": result.score,
+                }
+                for result in self.inference_results
+            ]
+        }
+        if format == "json":
+            return json.dumps(data, sort_keys=True)
+        else:
+            return yaml.safe_dump(data, sort_keys=True, indent=2)
+
+    @staticmethod
+    def decode(text: str, format: Literal["json", "yaml"]) -> "InferenceResults":
+        if format == "json":
+            data = json.loads(text)
+        else:
+            data = yaml.safe_load(text)
+
+        return InferenceResults(**data)
 
 
 class Tokenized(BaseModel):
