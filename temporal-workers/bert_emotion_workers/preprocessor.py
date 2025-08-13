@@ -11,7 +11,7 @@ preprocessor = Preprocessor()
 
 
 @activity.defn(name="preprocess")
-def preprocess(texts: list[str]) -> str:
+async def preprocess(texts: list[str]) -> str:
     tokenized: Tokenized = preprocessor(texts)
     encoded = tokenized.encode(format="json")
     return encoded

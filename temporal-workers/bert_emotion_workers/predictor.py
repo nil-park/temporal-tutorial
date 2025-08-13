@@ -12,7 +12,7 @@ predictor = Predictor(device="cuda" if torch.cuda.is_available() else "cpu")
 
 
 @activity.defn(name="predict")
-def predict(tokenized: str) -> str:
+async def predict(tokenized: str) -> str:
     decoded = Tokenized.decode(tokenized, format="json")
     output_logits = predictor(decoded)
     encoded = OutputLogits.encode(output_logits, format="json")

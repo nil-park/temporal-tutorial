@@ -11,7 +11,7 @@ postprocessor = Postprocessor()
 
 
 @activity.defn(name="postprocess")
-def postprocess(logits: str) -> str:
+async def postprocess(logits: str) -> str:
     decoded = OutputLogits.decode(logits, format="json")
     results = postprocessor(decoded)
     encoded = InferenceResults.encode(results, format="json")
