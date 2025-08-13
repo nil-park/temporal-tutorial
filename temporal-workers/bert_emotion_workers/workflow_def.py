@@ -7,7 +7,7 @@ from temporalio import workflow
 @workflow.defn
 class BertEmotionWorkflow:
     @workflow.run
-    async def run(self, texts: list[str]) -> list[dict]:
+    async def run(self, texts: list[str]) -> InferenceResults:
         tokenized = await workflow.execute_activity(
             "preprocess",
             texts,
@@ -26,11 +26,4 @@ class BertEmotionWorkflow:
             start_to_close_timeout=timedelta(seconds=10),
             task_queue="postprocess-q",
         )
-        decoded_results = InferenceResults.decode(results, format="json").inference_results
-        return [
-            {
-                "label": r.label,
-                "score": r.score,
-            }
-            for r in decoded_results
-        ]
+        return results
