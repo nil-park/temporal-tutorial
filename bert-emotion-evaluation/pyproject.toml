@@ -1,5 +1,5 @@
 [project]
-name = "benchmark-emotion-evaluation"
+name = "bert-emotion-evaluation"
 version = "0.0.0"
 description = ""
 authors = [{ name = "nil-park", email = "kwang0621@gmail.com" }]
