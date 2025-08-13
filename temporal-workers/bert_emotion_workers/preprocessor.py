@@ -13,6 +13,9 @@ preprocessor = Preprocessor()
 
 @activity.defn(name="preprocess")
 async def preprocess(texts: list[str]) -> Tokenized:
+    delay = float(os.environ.get("SIMULATE_PREPROCESS_DELAY", "0"))
+    if delay:
+        await asyncio.sleep(delay)
     return preprocessor(texts)
 
 
@@ -25,6 +28,7 @@ async def main():
         client,
         task_queue="preprocess-q",
         activities=[preprocess],
+        max_concurrent_activities=1,
     )
     await worker.run()
 

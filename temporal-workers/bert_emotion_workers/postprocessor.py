@@ -13,6 +13,9 @@ postprocessor = Postprocessor()
 
 @activity.defn(name="postprocess")
 async def postprocess(logits: OutputLogits) -> InferenceResults:
+    delay = float(os.environ.get("SIMULATE_POSTPROCESSOR_DELAY", "0"))
+    if delay:
+        await asyncio.sleep(delay)
     return postprocessor(logits)
 
 
@@ -25,6 +28,7 @@ async def main():
         client,
         task_queue="postprocess-q",
         activities=[postprocess],
+        max_concurrent_activities=1,
     )
     await worker.run()
 

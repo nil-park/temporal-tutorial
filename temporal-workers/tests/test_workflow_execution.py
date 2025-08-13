@@ -24,7 +24,7 @@ async def test_bert_emotion_workflow():
         texts,
         id=wid,
         task_queue="workflow-q",
-        execution_timeout=timedelta(seconds=10),
+        execution_timeout=timedelta(seconds=60),
     )
 
     result = await handle.result()

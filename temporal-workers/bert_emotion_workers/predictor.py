@@ -14,6 +14,9 @@ predictor = Predictor(device="cuda" if torch.cuda.is_available() else "cpu")
 
 @activity.defn(name="predict")
 async def predict(tokenized: Tokenized) -> OutputLogits:
+    delay = float(os.environ.get("SIMULATE_PREDICTOR_DELAY", "0"))
+    if delay:
+        await asyncio.sleep(delay)
     return predictor(tokenized)
 
 
@@ -26,6 +29,7 @@ async def main():
         client,
         task_queue="predict-q",
         activities=[predict],
+        max_concurrent_activities=1,
     )
     await worker.run()
 
