@@ -18,14 +18,15 @@ async def test_bert_emotion_workflow():
 
     client = await Client.connect(os.environ["TEMPORAL_TARGET"])
 
-    wid = f"emo-{uuid.uuid4()}"
+    wid = str(uuid.uuid4())
     handle = await client.start_workflow(
         BertEmotionWorkflow.run,
         texts,
         id=wid,
         task_queue="workflow-q",
-        execution_timeout=timedelta(minutes=5),
+        execution_timeout=timedelta(seconds=10),
     )
 
     result = await handle.result()
+    print()
     print_yellow(f"Workflow {wid} completed with result: {result}")
