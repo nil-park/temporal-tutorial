@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from bert_emotion_types import InferenceResults
 from temporalio import workflow
 
 
@@ -25,4 +26,11 @@ class BertEmotionWorkflow:
             start_to_close_timeout=timedelta(seconds=10),
             task_queue="postprocess-q",
         )
-        return [{"label": r.label, "score": r.score} for r in results.inference_results]
+        decoded_results = InferenceResults.decode(results, format="json").inference_results
+        return [
+            {
+                "label": r.label,
+                "score": r.score,
+            }
+            for r in decoded_results
+        ]
