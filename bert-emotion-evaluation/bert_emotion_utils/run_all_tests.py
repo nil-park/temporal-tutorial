@@ -5,7 +5,18 @@ from rich.console import Console
 from rich.panel import Panel
 
 DIR_PATH = Path(__file__).parent
-PROJECT_ROOT = DIR_PATH.parent
+
+
+def find_project_root() -> Path:
+    current_path = DIR_PATH
+    while current_path != current_path.parent:
+        if (current_path / "pyproject.toml").exists():
+            return current_path
+        current_path = current_path.parent
+    raise FileNotFoundError("Could not find project root with 'pyproject.toml' file.")
+
+
+PROJECT_ROOT = find_project_root()
 
 CONSOLE = Console()
 BORDER_STYLE = "magenta"
